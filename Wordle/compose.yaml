@@ -1,10 +1,10 @@
+version: '3.8'
+
 services:
-  mysql:
-    image: 'mysql:latest'
+  db:
+    image: 'postgres:alpine'
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: password
     ports:
-      - '3306'
+      - "5432:5432"
