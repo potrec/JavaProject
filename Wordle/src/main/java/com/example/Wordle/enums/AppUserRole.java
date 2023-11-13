@@ -1,4 +1,4 @@
-package com.example.Wordle.appuser;
+package com.example.Wordle.enums;
 
 public enum AppUserRole {
     ADMIN,
