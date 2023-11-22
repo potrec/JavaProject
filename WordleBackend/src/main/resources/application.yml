@@ -5,9 +5,9 @@ server:
 
 spring:
   datasource:
-    password:
-    url: jdbc:postgresql://localhost:5432/registration
-    username:
+    url: jdbc:postgresql://localhost:5432/database
+    password: admin
+    username: password
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,8 +20,8 @@ spring:
   mail:
     host: localhost
     port: 1025
-    username: hello
-    password: hello
+    username: admin
+    password: password
 
     properties:
       mail:
