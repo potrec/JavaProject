@@ -4,12 +4,10 @@ import com.example.Wordle.dtos.SignupRequest;
 import com.example.Wordle.dtos.UserDTO;
 import com.example.Wordle.enums.AppUserRole;
 import com.example.Wordle.models.User;
-import com.example.Wordle.models.UserRepository;
+import com.example.Wordle.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Service
 public class AuthServiceImp implements AuthService{
