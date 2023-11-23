@@ -1,6 +1,6 @@
 package com.example.Wordle.controllers;
 
-import com.example.Wordle.dtos.SignupRequest;
+import com.example.Wordle.dtos.SignupDTO;
 import com.example.Wordle.dtos.UserDTO;
 import com.example.Wordle.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ public class SignupUserController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody SignupRequest signupRequest) {
-        UserDTO createdUser = authService.createUser(signupRequest);
+    public ResponseEntity<?> createUser(@RequestBody SignupDTO signupDTO) {
+        UserDTO createdUser = authService.createUser(signupDTO);
         if(createdUser == null)
         {
             return ResponseEntity.badRequest().build();
