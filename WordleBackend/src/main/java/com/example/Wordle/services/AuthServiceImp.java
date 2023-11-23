@@ -1,6 +1,6 @@
 package com.example.Wordle.services;
 
-import com.example.Wordle.dtos.SignupRequest;
+import com.example.Wordle.dtos.SignupDTO;
 import com.example.Wordle.dtos.UserDTO;
 import com.example.Wordle.enums.AppUserRole;
 import com.example.Wordle.models.User;
@@ -15,12 +15,12 @@ public class AuthServiceImp implements AuthService{
     private UserRepository userRepository;
 
     @Override
-    public UserDTO createUser(SignupRequest signupRequest) {
+    public UserDTO createUser(SignupDTO signupDTO) {
         User user = new User();
-        user.setUsername(signupRequest.getUsername());
-        user.setPassword(signupRequest.getPassword());
-        user.setEmail(signupRequest.getEmail());
-        user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
+        user.setUsername(signupDTO.getUsername());
+        user.setPassword(signupDTO.getPassword());
+        user.setEmail(signupDTO.getEmail());
+        user.setPassword(new BCryptPasswordEncoder().encode(signupDTO.getPassword()));
         user.setAppUserRole(AppUserRole.USER);
         User createdUser = userRepository.save(user);
         UserDTO userDTO = new UserDTO();
