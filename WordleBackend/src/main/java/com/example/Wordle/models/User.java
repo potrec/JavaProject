@@ -3,22 +3,23 @@ package com.example.Wordle.models;
 import com.example.Wordle.enums.AppUserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Set;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User{
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
     @NotEmpty
     private String username;
     @NotEmpty
@@ -26,6 +27,27 @@ public class User{
     @NotEmpty
     @Column(unique = true)
     private String email;
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role_junction", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> authorities;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }
