@@ -1,5 +1,6 @@
 package com.example.Wordle.services;
 
+import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.SignupDTO;
 import com.example.Wordle.dtos.UserDTO;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,4 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public interface AuthService {
 
     UserDTO createUser(SignupDTO signupDTO);
+
+    UserDTO login(LoginDTO loginDTO);
 }
