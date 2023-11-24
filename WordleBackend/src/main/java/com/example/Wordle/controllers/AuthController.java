@@ -8,7 +8,7 @@ import com.example.Wordle.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-public class SignupUserController {
+@CrossOrigin("*")
+public class AuthController {
     @Autowired
     private AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody SignupDTO signupDTO, BindingResult result) {
-        UserDTO createdUser = authService.createUser(signupDTO);
         if (result.hasErrors()) {
             List<String> details = result.getAllErrors().stream()
                     .map(ObjectError::getDefaultMessage)
@@ -32,6 +32,7 @@ public class SignupUserController {
             ErrorResponse errorResponse = new ErrorResponse("Validation Failed", details);
             return ResponseEntity.badRequest().body(errorResponse);
         }
+        UserDTO createdUser = authService.createUser(signupDTO);
         if(createdUser == null)
         {
             return ResponseEntity.badRequest().build();
