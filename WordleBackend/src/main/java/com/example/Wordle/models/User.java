@@ -29,6 +29,10 @@ public class User implements UserDetails {
     @JoinTable(name = "user_role_junction", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> authorities;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<WordSchedule> wordSchedules;
+
+
     public User(String username, String encodedPassword, String email, Set<Role> authorities) {
         this.username = username;
         this.password = encodedPassword;
