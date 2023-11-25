@@ -1,6 +1,5 @@
 package com.example.Wordle.models;
 
-import com.example.Wordle.enums.AppUserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -25,8 +24,6 @@ public class User implements UserDetails {
     private String username;
     @NotEmpty
     private String password;
-    @NotEmpty
-    @Column(unique = true)
     private String email;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_junction", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

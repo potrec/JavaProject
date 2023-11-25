@@ -1,6 +1,5 @@
 package com.example.Wordle.dtos;
 
-import com.example.Wordle.enums.AppUserRole;
 import com.example.Wordle.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;

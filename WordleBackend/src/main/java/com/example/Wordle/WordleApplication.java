@@ -22,10 +22,10 @@ public class WordleApplication {
 		SpringApplication.run(WordleApplication.class, args);
 	}
 	//Dont delete or tests don't work
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(10,new SecureRandom());
-	}
+	//	@Bean
+	//	public PasswordEncoder passwordEncoder() {
+	//		return new BCryptPasswordEncoder(10,new SecureRandom());
+	//	}
 	@Bean
 	CommandLineRunner run (RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder)
 	{
