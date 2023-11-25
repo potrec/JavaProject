@@ -32,15 +32,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDTO body, BindingResult result) {
         if (result.hasErrors()) {
-//            List<String> details = result.getAllErrors().stream()
-//                    .map(ObjectError::getDefaultMessage)
-//                    .collect(Collectors.toList());
             throw new ValidationException(result.getAllErrors()
                     .stream()
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.toList()), "Validation Failed");
-//            ErrorResponse errorResponse = new ErrorResponse("Validation Failed", details);
-//            return ResponseEntity.badRequest().body(errorResponse);
         }
         User createdUser;
         try {
@@ -50,14 +45,7 @@ public class AuthController {
         {
             throw new CustomDataNotFoundException(e.getMessage());
         }
-
-//
-//        if(createdUser == null)
-//        {
-//            return ResponseEntity.badRequest().build();
-//        }
         return ResponseEntity.ok(createdUser);
-
     }
 
     @PostMapping("/login")
