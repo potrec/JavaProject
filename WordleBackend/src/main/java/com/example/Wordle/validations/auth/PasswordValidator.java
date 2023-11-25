@@ -1,4 +1,4 @@
-package com.example.Wordle.validations;
+package com.example.Wordle.validations.auth;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

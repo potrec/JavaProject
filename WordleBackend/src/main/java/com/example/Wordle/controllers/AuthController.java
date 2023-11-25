@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDTO body, BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> details = result.getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            ErrorResponse errorResponse = new ErrorResponse("Validation Failed", details);
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
         User createdUser;
         try {
             createdUser = authService.registerUser(body);
@@ -38,13 +46,7 @@ public class AuthController {
         {
             throw new CustomDataNotFoundException(e.getMessage());
         }
-//        if (result.hasErrors()) {
-//            List<String> details = result.getAllErrors().stream()
-//                    .map(ObjectError::getDefaultMessage)
-//                    .collect(Collectors.toList());
-//            ErrorResponse errorResponse = new ErrorResponse("Validation Failed", details);
-//            return ResponseEntity.badRequest().body(errorResponse);
-//        }
+
 //
 //        if(createdUser == null)
 //        {
