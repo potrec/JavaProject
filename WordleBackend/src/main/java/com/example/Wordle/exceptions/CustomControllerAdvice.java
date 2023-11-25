@@ -25,7 +25,7 @@ class CustomControllerAdvice {
         );
     }
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponse> handleCustomDataNotFoundException(
+    public ResponseEntity<ErrorResponse> handleCustomValidationException(
             ValidationException e
     ) {
 
@@ -40,8 +40,22 @@ class CustomControllerAdvice {
         );
     }
 
-    // fallback method
-    @ExceptionHandler(Exception.class) // exception handled
+    @ExceptionHandler(CustomDataNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCustomDataNotFoundException(
+            ValidationException e
+    ) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        status,
+                        e.getMessage()
+                ),
+                status
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleExceptions(
             Exception e
     ) {
