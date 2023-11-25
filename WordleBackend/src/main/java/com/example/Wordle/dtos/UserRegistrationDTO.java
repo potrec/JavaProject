@@ -1,13 +1,12 @@
 package com.example.Wordle.dtos;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 
 @Data
-@Getter
-@Setter
-public class LoginDTO {
+@ToString
+public class UserRegistrationDTO {
     private String username;
     private String password;
+    private String email;
 }
