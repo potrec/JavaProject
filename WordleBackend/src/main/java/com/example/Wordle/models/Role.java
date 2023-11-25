@@ -22,4 +22,7 @@ public class Role implements GrantedAuthority {
 
     private String authority;
 
+    public Role(String admin) {
+        this.authority = admin;
+    }
 }
