@@ -1,17 +1,15 @@
 package com.example.Wordle.services;
 
 import com.example.Wordle.dtos.LoginDTO;
-import com.example.Wordle.dtos.UserLoginResponseDTO;
-import com.example.Wordle.dtos.UserRegistrationDTO;
-import com.example.Wordle.models.User;
+import com.example.Wordle.dtos.SignupDTO;
+import com.example.Wordle.dtos.UserDTO;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 public interface AuthService {
 
-    User registerUser(UserRegistrationDTO userRegistrationDTO);
-    UserLoginResponseDTO login(LoginDTO loginDTO);
+    UserDTO createUser(SignupDTO signupDTO);
 
-
+    UserDTO login(LoginDTO loginDTO);
 }

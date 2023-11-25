@@ -31,30 +31,23 @@ public class User implements UserDetails {
     @JoinTable(name = "user_role_junction", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> authorities;
 
-    public User(String username, String encodedPassword, String email, Set<Role> authorities) {
-        this.username = username;
-        this.password = encodedPassword;
-        this.email = email;
-        this.authorities = authorities;
-    }
-
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return false;
     }
 }
