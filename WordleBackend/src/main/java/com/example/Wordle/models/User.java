@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -37,6 +38,7 @@ public class User implements UserDetails {
         this.email = email;
         this.authorities = authorities;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

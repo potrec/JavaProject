@@ -1,46 +1,44 @@
 package com.example.Wordle.repository;
 
-import com.example.Wordle.WordleApplication;
-import com.example.Wordle.enums.AppUserRole;
+import com.example.Wordle.models.Role;
 import com.example.Wordle.models.User;
-import com.github.javafaker.Faker;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ContextConfiguration;
 
+import java.util.HashSet;
+import java.util.Set;
 
 @DataJpaTest
 public class UserRepositoryTest {
     @Autowired
     private UserRepository underTestUserRepository;
-    private static final Faker FAKER = new Faker();
-    private static final String email = "test@example.com";
 
+    @Autowired
+    private RoleRepository roleRepository;
+    private static final String email = "test@example.com";
+    private static final String username = "admin";
+    private static final String password = "password";
     @Test
     public void UserRepositorySaveUser() {
-        User user = User.builder()
-                .username(FAKER.funnyName().name())
-                .password("Password")
-                .email(email)
-                .appUserRole(AppUserRole.USER).build();
-        Assertions.assertThat(user).isNotNull();
+        Role adminRole = roleRepository.save(new Role("ADMIN"));
+        roleRepository.save(new Role("USER"));
+        Set<Role> roles = new HashSet<Role>();
+        roles.add(adminRole);
+        User admin = new User( username, "password", email, roles);
+        Assertions.assertThat(admin).isNotNull();
 
-        User savedUser = underTestUserRepository.save(user);
+        User savedUser = underTestUserRepository.save(admin);
 
         Assertions.assertThat(savedUser).isNotNull();
-        Assertions.assertThat(savedUser.getId()).isGreaterThan(0);
+        Assertions.assertThat(savedUser.getUserId()).isGreaterThan(0);
     }
 
     @Test
-    void findByEmail() {
-        User user = underTestUserRepository.findByEmail(email);
-        Assertions.assertThat(user).isNotNull();
-        Assertions.assertThat(user.getEmail()).isEqualTo(email);
+    public void UserRepositoryFindByUsername() {
+        underTestUserRepository.findByUsername(username);
+        Assertions.assertThat(underTestUserRepository.findByUsername(username)).isPresent();
     }
 }
