@@ -4,8 +4,8 @@ import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.UserLoginResponseDTO;
 import com.example.Wordle.dtos.UserRegistrationDTO;
 import com.example.Wordle.exceptions.CustomDataNotFoundException;
+import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.User;
-import com.example.Wordle.response.ErrorResponse;
 import com.example.Wordle.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +32,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDTO body, BindingResult result) {
         if (result.hasErrors()) {
-            List<String> details = result.getAllErrors().stream()
+//            List<String> details = result.getAllErrors().stream()
+//                    .map(ObjectError::getDefaultMessage)
+//                    .collect(Collectors.toList());
+            throw new ValidationException(result.getAllErrors()
+                    .stream()
                     .map(ObjectError::getDefaultMessage)
-                    .collect(Collectors.toList());
-            ErrorResponse errorResponse = new ErrorResponse("Validation Failed", details);
-            return ResponseEntity.badRequest().body(errorResponse);
+                    .collect(Collectors.toList()), "Validation Failed");
+//            ErrorResponse errorResponse = new ErrorResponse("Validation Failed", details);
+//            return ResponseEntity.badRequest().body(errorResponse);
         }
         User createdUser;
         try {

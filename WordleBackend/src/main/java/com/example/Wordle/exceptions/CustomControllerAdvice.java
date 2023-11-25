@@ -10,18 +10,31 @@ import java.io.StringWriter;
 
 @ControllerAdvice
 class CustomControllerAdvice {
-    @ExceptionHandler(NullPointerException.class) // exception handled
+    @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ErrorResponse> handleNullPointerExceptions(
             Exception e
     ) {
-        // ... potential custom logic
-
-        HttpStatus status = HttpStatus.NOT_FOUND; // 404
+        HttpStatus status = HttpStatus.NOT_FOUND;
 
         return new ResponseEntity<>(
                 new ErrorResponse(
                         status,
                         e.getMessage()
+                ),
+                status
+        );
+    }
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorResponse> handleCustomDataNotFoundException(
+            ValidationException e
+    ) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        status,
+                        e.getMessage(),
+                        e.getErrors()
                 ),
                 status
         );
@@ -32,11 +45,8 @@ class CustomControllerAdvice {
     public ResponseEntity<ErrorResponse> handleExceptions(
             Exception e
     ) {
-        // ... potential custom logic
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 500
-
-        // converting the stack trace to String
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         e.printStackTrace(printWriter);
@@ -46,7 +56,7 @@ class CustomControllerAdvice {
                 new ErrorResponse(
                         status,
                         e.getMessage(),
-                        stackTrace // specifying the stack trace in case of 500s
+                        stackTrace
                 ),
                 status
         );

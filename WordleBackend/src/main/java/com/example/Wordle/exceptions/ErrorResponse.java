@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class ErrorResponse {
 
     private String stackTrace;
 
-    private Object data;
+    private List<String> errors;
 
     public ErrorResponse() {
         timestamp = new Date();
@@ -54,15 +55,12 @@ public class ErrorResponse {
     public ErrorResponse(
             HttpStatus httpStatus,
             String message,
-            String stackTrace,
-            Object data
+            List<String> errors
     ) {
         this(
                 httpStatus,
-                message,
-                stackTrace
+                message
         );
-
-        this.data = data;
+        this.errors = errors;
     }
 }
