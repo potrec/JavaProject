@@ -21,7 +21,4 @@ public class Word {
     private Long wordId;
     @NotEmpty
     private String word;
-    @OneToMany(mappedBy = "word", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<WordSchedule> wordSchedules;
-
 }
