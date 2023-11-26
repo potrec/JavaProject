@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private Set<Role> authorities;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UserGuessing> userGuessing;
+    private Set<UserGameGuess> userGameGuess;
 
 
     public User(String username, String encodedPassword, String email, Set<Role> authorities) {

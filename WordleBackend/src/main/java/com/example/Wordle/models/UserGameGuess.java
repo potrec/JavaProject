@@ -4,16 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "user_guessings")
+@Table(name = "user_game_guessing")
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserGuessing {
+public class UserGameGuess {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userGuessingId;
+
+    @Column(name = "guess_number")
+    private int guessNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

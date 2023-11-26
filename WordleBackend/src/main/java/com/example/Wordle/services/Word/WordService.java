@@ -1,10 +1,9 @@
-package com.example.Wordle.services.User;
+package com.example.Wordle.services.Word;
 
 import com.example.Wordle.dtos.WordDTO;
 import com.example.Wordle.exceptions.DataNotFoundException;
-import com.example.Wordle.models.Word;
 
-public interface UserPlayService {
+public interface WordService {
     WordDTO getRandomWord();
     Iterable<WordDTO> getAllWords();
     WordDTO getWordById(int id) throws DataNotFoundException;

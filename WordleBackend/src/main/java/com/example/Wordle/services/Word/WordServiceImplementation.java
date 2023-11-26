@@ -1,4 +1,4 @@
-package com.example.Wordle.services.User;
+package com.example.Wordle.services.Word;
 
 import com.example.Wordle.dtos.WordDTO;
 import com.example.Wordle.exceptions.DataNotFoundException;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UserPlayServiceImplementation implements UserPlayService {
+public class WordServiceImplementation implements WordService {
     @Autowired
     private WordRepository wordRepository;
 
