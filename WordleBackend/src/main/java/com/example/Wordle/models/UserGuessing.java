@@ -19,10 +19,6 @@ public class UserGuessing {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "word_schedule_id")
-    private WordSchedule wordSchedule;
-
     @Column(name = "guess")
     private String guess;
 
