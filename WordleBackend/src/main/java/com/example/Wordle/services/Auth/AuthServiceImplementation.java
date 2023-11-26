@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -56,14 +57,17 @@ public class AuthServiceImplementation implements AuthService {
 
     @Override
     public UserLoginResponseDTO login(LoginDTO loginDTO) {
+        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(loginDTO.getUsername()).orElseThrow(() -> new ValidationException(Collections.singletonList("No user with given username is found"),"Invalid Credentials")));
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.get().getPassword())) {
+            throw new ValidationException(Collections.singletonList("Wrong password for this user"),"Invalid Credentials");
+        }
         try {
-            Authentication auth = authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
+            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
             );
 
             String token = tokenService.generateJwt(auth);
 
-            return new UserLoginResponseDTO(userRepository.findByUsername(loginDTO.getUsername()), token);
+            return new UserLoginResponseDTO(user, token);
         } catch (Exception e) {
             return new UserLoginResponseDTO(null, null);
         }
