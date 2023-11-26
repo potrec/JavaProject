@@ -23,4 +23,5 @@ public class Word {
     @NotEmpty
     private String word;
 
+
 }

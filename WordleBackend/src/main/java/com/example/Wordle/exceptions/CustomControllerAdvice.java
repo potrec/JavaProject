@@ -7,6 +7,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -91,6 +93,22 @@ class CustomControllerAdvice {
     ) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        status,
+                        e.getMessage()
+                ),
+                status
+        );
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleExceptions(
+            NoResourceFoundException e
+    ) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+
         return new ResponseEntity<>(
                 new ErrorResponse(
                         status,

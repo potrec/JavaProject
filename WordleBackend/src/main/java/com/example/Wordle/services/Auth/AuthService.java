@@ -13,5 +13,5 @@ public interface AuthService {
     User registerUser(UserRegistrationDTO userRegistrationDTO);
     UserLoginResponseDTO login(LoginDTO loginDTO);
 
-
+    User getAuthUser();
 }

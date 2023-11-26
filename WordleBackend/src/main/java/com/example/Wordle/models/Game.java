@@ -19,7 +19,9 @@ public class Game {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private String word;
+    @ManyToOne
+    @JoinColumn(name = "word_id")
+    private Word word;
     private int attempts;
     private boolean status;
     private LocalDateTime date;
