@@ -3,7 +3,7 @@ package com.example.Wordle.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 import java.util.Set;
 @Entity
 @Table(name = "games")
@@ -14,10 +14,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class Game {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long gameId;
-    @OneToOne(mappedBy = "word", fetch = FetchType.LAZY)
-    private Word word;
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<UserGameGuess> userGameGuesses;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    private String word;
+    private int attempts;
+    private boolean status;
+    private LocalDateTime date;
 }

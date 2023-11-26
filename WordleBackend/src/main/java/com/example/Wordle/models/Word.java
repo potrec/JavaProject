@@ -18,6 +18,7 @@ import java.util.Set;
 public class Word {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "word_id")
     private Long wordId;
     @NotEmpty
     private String word;

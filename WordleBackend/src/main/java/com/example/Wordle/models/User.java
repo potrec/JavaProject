@@ -28,10 +28,8 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_junction", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> authorities;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UserGameGuess> userGameGuess;
-
+    private Set<Game> game;
 
     public User(String username, String encodedPassword, String email, Set<Role> authorities) {
         this.username = username;
