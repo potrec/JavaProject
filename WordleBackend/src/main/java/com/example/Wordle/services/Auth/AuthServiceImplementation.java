@@ -1,12 +1,15 @@
-package com.example.Wordle.services;
+package com.example.Wordle.services.Auth;
 
 import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.UserLoginResponseDTO;
 import com.example.Wordle.dtos.UserRegistrationDTO;
+import com.example.Wordle.exceptions.CustomDataNotFoundException;
+import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.Role;
 import com.example.Wordle.models.User;
 import com.example.Wordle.repository.RoleRepository;
 import com.example.Wordle.repository.UserRepository;
+import com.example.Wordle.services.Token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,7 +64,7 @@ public class AuthServiceImplementation implements AuthService {
             String token = tokenService.generateJwt(auth);
 
             return new UserLoginResponseDTO(userRepository.findByUsername(loginDTO.getUsername()), token);
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             return new UserLoginResponseDTO(null, null);
         }
     }

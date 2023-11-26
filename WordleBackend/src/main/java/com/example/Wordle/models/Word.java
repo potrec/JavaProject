@@ -21,4 +21,5 @@ public class Word {
     private Long wordId;
     @NotEmpty
     private String word;
+
 }

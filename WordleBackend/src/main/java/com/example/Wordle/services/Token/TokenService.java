@@ -1,4 +1,4 @@
-package com.example.Wordle.services;
+package com.example.Wordle.services.Token;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
