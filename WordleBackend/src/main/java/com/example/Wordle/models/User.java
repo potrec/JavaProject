@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -28,6 +29,8 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_junction", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> authorities;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Game> games = new HashSet<>();
 
     public User(String username, String encodedPassword, String email, Set<Role> authorities) {
         this.username = username;

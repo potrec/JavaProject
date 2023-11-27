@@ -6,7 +6,7 @@ import com.example.Wordle.dtos.UserRegistrationDTO;
 import com.example.Wordle.exceptions.CustomDataNotFoundException;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.User;
-import com.example.Wordle.services.AuthService;
+import com.example.Wordle.services.Auth.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,15 +32,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDTO body, BindingResult result) {
         if (result.hasErrors()) {
-//            List<String> details = result.getAllErrors().stream()
-//                    .map(ObjectError::getDefaultMessage)
-//                    .collect(Collectors.toList());
             throw new ValidationException(result.getAllErrors()
                     .stream()
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.toList()), "Validation Failed");
-//            ErrorResponse errorResponse = new ErrorResponse("Validation Failed", details);
-//            return ResponseEntity.badRequest().body(errorResponse);
         }
         User createdUser;
         try {
@@ -50,22 +45,15 @@ public class AuthController {
         {
             throw new CustomDataNotFoundException(e.getMessage());
         }
-
-//
-//        if(createdUser == null)
-//        {
-//            return ResponseEntity.badRequest().build();
-//        }
         return ResponseEntity.ok(createdUser);
-
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         UserLoginResponseDTO user = authService.login(loginDTO);
-        if(user == null)
+        if(user.getUser() == null || user.getJwt() == null)
         {
-            return ResponseEntity.badRequest().build();
+            throw new ValidationException(Collections.singletonList("Invalid Credentials"),"Invalid Credentials");
         }
         return ResponseEntity.ok(user);
     }
