@@ -14,4 +14,5 @@ public interface AuthService {
     UserLoginResponseDTO login(LoginDTO loginDTO);
     User getAuthUser();
     User editUser(User user);
+    String deleteUser(User user);
 }

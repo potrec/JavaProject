@@ -86,4 +86,9 @@ public class AuthServiceImplementation implements AuthService {
     public User editUser(User user) {
         return userRepository.save(user);
     }
+
+    public String deleteUser(User user){
+        userRepository.delete(user);
+        return "user deleted";
+    }
 }

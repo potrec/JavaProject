@@ -34,10 +34,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    //delete account
-//    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-//    public ResponseEntity<?> deleteUser() {
-//        User authUser = authService.getAuthUser();
-//        authService.
-//    }
+//    delete account
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteUser() {
+        User authUser = authService.getAuthUser();
+        return ResponseEntity.ok(authService.deleteUser(authUser));
+    }
 }
