@@ -65,7 +65,7 @@ public class GameServiceImplementation implements GameService {
             gameStateDTO.setStatus(true);
             gameStateDTO.setFinished(true);
         }
-        if(game.getAttempts() > 5)
+        if(game.getAttempts() == 5)
         {
             game.setFinished(true);
             gameStateDTO.setFinished(true);
