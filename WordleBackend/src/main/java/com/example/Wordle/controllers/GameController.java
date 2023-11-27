@@ -1,12 +1,18 @@
 package com.example.Wordle.controllers;
 
+import com.example.Wordle.dtos.GameDTO;
+import com.example.Wordle.dtos.GameStateDTO;
 import com.example.Wordle.dtos.GuessWordDTO;
 import com.example.Wordle.dtos.WordDTO;
+import com.example.Wordle.exceptions.CustomDataNotFoundException;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.Game;
+import com.example.Wordle.models.GameGuess;
 import com.example.Wordle.models.Word;
+import com.example.Wordle.repository.GameGuessRepository;
 import com.example.Wordle.repository.GameRepository;
 import com.example.Wordle.services.Auth.AuthService;
+import com.example.Wordle.services.Game.GameService;
 import com.example.Wordle.services.Word.WordService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +22,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,18 +38,17 @@ public class GameController {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    GameGuessRepository gameGuessRepository;
+
+    @Autowired
+    GameService gameService;
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<?> createGame() {
-        Game game = new Game();
         WordDTO wordDTO = new WordDTO(wordService.getRandomWord().getWord());
         Word word = wordDTO.getWord().get();
-        game.setWord(word);
-        game.setAttempts(0);
-        game.setStatus(false);
-        game.setDate(LocalDateTime.now());
-        game.setUser(authService.getAuthUser());
-        gameRepository.save(game);
-        return ResponseEntity.ok(game);
+        return ResponseEntity.ok(gameService.createGame(word));
     }
 
     @RequestMapping(value = "/guess" , method = RequestMethod.POST)
@@ -51,7 +59,8 @@ public class GameController {
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.toList()), body.getWord());
         }
-        Game game = gameRepository.findById(body.getGameId()).get();
-        return ResponseEntity.ok(game);
+        Game game = gameRepository.findById(body.getGameId()).orElseThrow(() -> new CustomDataNotFoundException("Game not found"));
+        if(game.isFinished()) return ResponseEntity.ok("Game already finished");
+        return ResponseEntity.ok(gameService.guessWord(body, game));
     }
 }

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class GameGuess {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userGuessingId;
+    private Long gameGuessId;
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;

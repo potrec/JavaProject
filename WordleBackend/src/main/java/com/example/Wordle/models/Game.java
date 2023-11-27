@@ -16,13 +16,16 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "word_id")
     private Word word;
+    @OneToMany(mappedBy = "game")
+    private Set<GameGuess> gameGuesses;
     private int attempts;
     private boolean status;
+    private boolean finished;
     private LocalDateTime date;
 }
