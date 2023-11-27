@@ -1,4 +1,4 @@
-package com.example.Wordle.services;
+package com.example.Wordle.services.Auth;
 
 import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.UserLoginResponseDTO;
@@ -13,5 +13,5 @@ public interface AuthService {
     User registerUser(UserRegistrationDTO userRegistrationDTO);
     UserLoginResponseDTO login(LoginDTO loginDTO);
 
-
+    User getAuthUser();
 }
