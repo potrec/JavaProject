@@ -31,8 +31,12 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -67,9 +71,9 @@ public class WebSecurityConfiguration {
         daoProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(daoProvider);
     }
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
-    {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
@@ -80,8 +84,8 @@ public class WebSecurityConfiguration {
                 });
         http
                 .oauth2ResourceServer()
-                    .jwt()
-                    .jwtAuthenticationConverter(jwtAuthenticationConverter());
+                .jwt()
+                .jwtAuthenticationConverter(jwtAuthenticationConverter());
         http
                 .sessionManagement(session ->{
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

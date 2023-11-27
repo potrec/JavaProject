@@ -7,10 +7,17 @@
  let email = '';
  let password = '';
  let errors = [];
-
+ const http = axios.create({
+		baseURL: 'http://127.0.0.1:8080',
+		headers: {
+			'X-Requested-With': 'XMLHttpRequest',
+      'Access-Control-Allow-Origin' : 'http://localhost:5173'
+		},
+		withCredentials: true
+	});
  async function register() {
  try {
-   const response = await axios.post('http://localhost:8080/auth/register', { username, email, password });
+   const response = await http.post('http://localhost:8080/auth/register', { username, email, password });
    if (response.status === 200) {
      goto('/');
    }
