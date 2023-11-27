@@ -59,15 +59,17 @@ public class GameServiceImplementation implements GameService {
         gameGuessRepository.save(wordGuess);
         GameStateDTO gameStateDTO = new GameStateDTO();
         gameStateDTO.setStatus(false);
+        if(game.getAttempts() == 5)
+        {
+            game.setFinished(true);
+            game.setStatus(false);
+            gameStateDTO.setFinished(true);
+            gameStateDTO.setStatus(false);
+        }
         if(areEqual) {
             game.setStatus(true);
             game.setFinished(true);
             gameStateDTO.setStatus(true);
-            gameStateDTO.setFinished(true);
-        }
-        if(game.getAttempts() == 5)
-        {
-            game.setFinished(true);
             gameStateDTO.setFinished(true);
         }
         gameRepository.save(game);
