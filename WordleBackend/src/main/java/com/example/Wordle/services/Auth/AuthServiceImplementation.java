@@ -82,4 +82,8 @@ public class AuthServiceImplementation implements AuthService {
         String userName = jwt.getSubject();
         return userRepository.findByUsername(userName).orElseThrow(() -> new CustomDataNotFoundException("No user with given username "+ userName+" is found"));
     }
+
+    public User editUser(User user) {
+        return userRepository.save(user);
+    }
 }
