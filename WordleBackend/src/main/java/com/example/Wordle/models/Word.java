@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @EqualsAndHashCode

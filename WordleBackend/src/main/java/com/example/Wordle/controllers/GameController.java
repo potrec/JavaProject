@@ -1,13 +1,10 @@
 package com.example.Wordle.controllers;
 
-import com.example.Wordle.dtos.GameDTO;
-import com.example.Wordle.dtos.GameStateDTO;
 import com.example.Wordle.dtos.GuessWordDTO;
 import com.example.Wordle.dtos.WordDTO;
 import com.example.Wordle.exceptions.CustomDataNotFoundException;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.Game;
-import com.example.Wordle.models.GameGuess;
 import com.example.Wordle.models.Word;
 import com.example.Wordle.repository.GameGuessRepository;
 import com.example.Wordle.repository.GameRepository;
@@ -20,11 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController

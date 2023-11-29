@@ -3,7 +3,6 @@ package com.example.Wordle.services.Game;
 import com.example.Wordle.dtos.GameDTO;
 import com.example.Wordle.dtos.GameStateDTO;
 import com.example.Wordle.dtos.GuessWordDTO;
-import com.example.Wordle.exceptions.CustomDataNotFoundException;
 import com.example.Wordle.models.Game;
 import com.example.Wordle.models.GameGuess;
 import com.example.Wordle.models.Word;
@@ -12,9 +11,7 @@ import com.example.Wordle.repository.GameRepository;
 import com.example.Wordle.services.Auth.AuthService;
 import com.example.Wordle.services.Word.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

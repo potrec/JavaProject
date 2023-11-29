@@ -1,7 +1,5 @@
 package com.example.Wordle.validations.word;
 
-import com.example.Wordle.dtos.GuessWordDTO;
-import com.example.Wordle.models.Game;
 import com.example.Wordle.repository.GameRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

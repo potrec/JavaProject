@@ -13,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
-
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,12 +47,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
         UserLoginResponseDTO user = authService.login(loginDTO);
-        if(user.getUser() == null || user.getJwt() == null)
-        {
-            throw new ValidationException(Collections.singletonList("Invalid Credentials"),"Invalid Credentials");
-        }
         return ResponseEntity.ok(user);
     }
 }

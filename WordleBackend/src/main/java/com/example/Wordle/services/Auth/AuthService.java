@@ -4,12 +4,7 @@ import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.UserLoginResponseDTO;
 import com.example.Wordle.dtos.UserRegistrationDTO;
 import com.example.Wordle.models.User;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
-
-import static com.fasterxml.jackson.databind.util.ClassUtil.name;
-
 
 @Service
 public interface AuthService {

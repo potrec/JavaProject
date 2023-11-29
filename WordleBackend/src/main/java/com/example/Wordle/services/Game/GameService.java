@@ -6,8 +6,6 @@ import com.example.Wordle.dtos.GuessWordDTO;
 import com.example.Wordle.models.Game;
 import com.example.Wordle.models.Word;
 
-import java.util.List;
-
 public interface GameService {
     //create a new word guessing game
     GameDTO createGame(Word word);

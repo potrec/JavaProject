@@ -6,13 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Optional;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class UserLoginResponseDTO {
-    private Optional<User> user;
+    private User user;
     private String jwt;
 }
