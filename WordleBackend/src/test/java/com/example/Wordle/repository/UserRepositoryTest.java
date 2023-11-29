@@ -27,7 +27,7 @@ public class UserRepositoryTest {
         roleRepository.save(new Role("USER"));
         Set<Role> roles = new HashSet<Role>();
         roles.add(adminRole);
-        User admin = new User( username, "password", email, roles);
+        User admin = new User( username, password, email, roles);
         Assertions.assertThat(admin).isNotNull();
 
         User savedUser = underTestUserRepository.save(admin);
