@@ -23,7 +23,6 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    //edit user
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
     public ResponseEntity<?> editUser(@RequestBody SignupDTO user) {
         User authUser = authService.getAuthUser();
@@ -34,7 +33,6 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-//    delete account
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser() {
         User authUser = authService.getAuthUser();
