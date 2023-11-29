@@ -2,6 +2,7 @@ package com.example.Wordle.validations.auth;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
 import java.lang.annotation.*;
 
 @Documented
