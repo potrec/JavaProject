@@ -5,11 +5,13 @@ import com.example.Wordle.validations.auth.UniqueUsername;
 import com.example.Wordle.validations.auth.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString
+@AllArgsConstructor
 public class UserRegistrationDTO {
     @NotBlank(message = "Username cannot be blank")
     @UniqueUsername
