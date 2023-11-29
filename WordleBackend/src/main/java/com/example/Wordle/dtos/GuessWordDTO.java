@@ -2,7 +2,7 @@ package com.example.Wordle.dtos;
 
 import com.example.Wordle.validations.word.FiveCharWord;
 import com.example.Wordle.validations.word.GameExist;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

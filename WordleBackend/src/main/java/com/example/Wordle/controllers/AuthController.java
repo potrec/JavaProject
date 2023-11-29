@@ -9,10 +9,11 @@ import com.example.Wordle.models.User;
 import com.example.Wordle.services.Auth.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.stream.Collectors;
 
 @RestController
