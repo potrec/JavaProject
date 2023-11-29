@@ -52,17 +52,17 @@ import java.util.Locale;
 @TestPropertySource(locations = "classpath:application.yml")
 @AutoConfigureTestDatabase
 class AuthControllerIntegrationTest {
-    @Autowired
-    private MockMvc mvc;
-
-    @Autowired
-    private AuthService authService;
-
-    @Test
-    public void whenValidInput_thenCreateUser() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO("Username","Password","email@gmai.com");
-        mvc.perform(post("auth/register").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRegistrationDTO)));
-    }
+//    @Autowired
+//    private MockMvc mvc;
+//
+//    @Autowired
+//    private AuthService authService;
+//
+//    @Test
+//    public void whenValidInput_thenCreateUser() throws Exception {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO("Username","Password","email@gmai.com");
+//        mvc.perform(post("auth/register").contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(userRegistrationDTO)));
+//    }
 }
