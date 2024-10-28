@@ -26,7 +26,7 @@ To run the Wordle Guessing Game locally, follow these steps:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/wordle-guessing-game.git
+   git clone https://github.com/potrec/JavaProject
    cd JavaProject
    ```
 
