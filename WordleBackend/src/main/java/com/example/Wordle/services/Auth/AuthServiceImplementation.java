@@ -3,6 +3,7 @@ package com.example.Wordle.services.Auth;
 import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.UserLoginResponseDTO;
 import com.example.Wordle.dtos.UserRegistrationDTO;
+import com.example.Wordle.dtos.UserResponseDTO;
 import com.example.Wordle.exceptions.CustomDataNotFoundException;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.Role;
@@ -67,10 +68,13 @@ public class AuthServiceImplementation implements AuthService {
             );
 
             String token = tokenService.generateJwt(auth);
-
-            return new UserLoginResponseDTO(user, token);
+            UserResponseDTO userResponseDTO = new UserResponseDTO();
+            userResponseDTO.id = user.getUserId();
+            userResponseDTO.username = user.getUsername();
+            userResponseDTO.email = user.getEmail();
+            return new UserLoginResponseDTO(userResponseDTO, token);
         } catch (Exception e) {
-            return new UserLoginResponseDTO(null, null);
+            throw new CustomDataNotFoundException(e.getMessage());
         }
     }
 

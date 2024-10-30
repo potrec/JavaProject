@@ -44,7 +44,7 @@ public class AuthController {
         {
             throw new CustomDataNotFoundException(e.getMessage());
         }
-        return ResponseEntity.ok(createdUser);
+        return ResponseEntity.ok("User created successfully");
     }
 
     @PostMapping("/login")
