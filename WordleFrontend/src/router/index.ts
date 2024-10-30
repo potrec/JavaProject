@@ -19,7 +19,25 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/LoginView.vue'),
     },
+    {
+      path: '/main',
+      name: 'main',
+      component: () => import('../views/MainView.vue'),
+    }
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/register', '/']
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('user') && localStorage.getItem('token')
+
+
+  if (authRequired && !loggedIn) {
+    return next('/login')
+  }
+
+  next()
 })
 
 export default router
