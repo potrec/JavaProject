@@ -4,7 +4,7 @@ import Button from '@/components/ui/button/Button.vue'
 </script>
 
 <template>
-  <nav>
+  <nav class="space-x-8">
     <Button><RouterLink to="/">Home</RouterLink></Button>
     <Button><RouterLink to="/about">About</RouterLink></Button>
     <Button><RouterLink to="/register">Sign up</RouterLink></Button>
