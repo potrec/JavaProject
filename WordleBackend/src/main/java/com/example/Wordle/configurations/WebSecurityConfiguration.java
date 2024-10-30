@@ -69,21 +69,21 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/**").permitAll();
-                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers("/api/v*/**").hasAnyRole("ADMIN","USER");
-                    auth.anyRequest().authenticated();
-                });
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> {
+                auth.requestMatchers("/auth/**").permitAll();
+                auth.requestMatchers("/admin/**").hasRole("ADMIN");
+                auth.requestMatchers("/api/v*/**").hasAnyRole("ADMIN","USER");
+                auth.anyRequest().authenticated();
+            });
         http
-                .oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(jwtAuthenticationConverter());
+            .oauth2ResourceServer()
+            .jwt()
+            .jwtAuthenticationConverter(jwtAuthenticationConverter());
         http
-                .sessionManagement(session ->{
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                });
+            .sessionManagement(session ->{
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            });
 
         return http.build();
     }

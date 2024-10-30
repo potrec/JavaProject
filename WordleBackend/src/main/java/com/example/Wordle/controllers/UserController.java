@@ -2,8 +2,10 @@ package com.example.Wordle.controllers;
 
 import com.example.Wordle.dtos.SignupDTO;
 import com.example.Wordle.models.User;
+import com.example.Wordle.responses.ApiResponse;
 import com.example.Wordle.services.Auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,10 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
     @RequestMapping(value = "/me", method = RequestMethod.GET)
-    public ResponseEntity<?> getAuthUser() {
+    public ApiResponse<?> getAuthUser() {
         User user = authService.getAuthUser();
-        return ResponseEntity.ok(user);
+        if(user == null) return new ApiResponse<>(false, HttpStatus.UNAUTHORIZED, "User not found", null);
+        return new ApiResponse<>(true, HttpStatus.OK, "User found", user);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)

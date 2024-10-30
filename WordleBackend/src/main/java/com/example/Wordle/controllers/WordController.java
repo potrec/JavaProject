@@ -29,6 +29,9 @@ public class WordController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<?> getWordByWord(@RequestParam String word){
+        if(word == null || word.isEmpty()){
+            return ResponseEntity.badRequest().body("Word cannot be empty");
+        }
         return ResponseEntity.ok(wordService.getWordByWord(word));
     }
 }
