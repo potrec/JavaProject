@@ -1,14 +1,12 @@
 package com.example.Wordle.dtos;
 
-import com.example.Wordle.validations.auth.PasswordMatches;
 import com.example.Wordle.validations.auth.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-@PasswordMatches
-public class SignupDTO {
+public class UserEditDto {
     @NotBlank(message = "Username cannot be blank")
     private String username;
     @NotBlank(message = "Password cannot be blank")
@@ -16,8 +14,4 @@ public class SignupDTO {
     private String password;
     @Email
     private String email;
-
-    public @NotBlank(message = "Password cannot be blank") String getConfirmPassword() {
-        return null;
-    }
 }

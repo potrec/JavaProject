@@ -4,7 +4,6 @@ import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.UserLoginResponseDTO;
 import com.example.Wordle.dtos.UserRegistrationDTO;
 import com.example.Wordle.exceptions.DataNotFoundException;
-import com.example.Wordle.exceptions.ErrorResponse;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.responses.ApiResponse;
 import com.example.Wordle.services.Auth.AuthService;

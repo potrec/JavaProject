@@ -1,9 +1,9 @@
 package com.example.Wordle.controllers;
 
-import com.example.Wordle.dtos.SignupDTO;
+import com.example.Wordle.dtos.UserEditDto;
+import com.example.Wordle.exceptions.DataNotFoundException;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.User;
-import com.example.Wordle.repository.UserRepository;
 import com.example.Wordle.responses.ApiResponse;
 import com.example.Wordle.services.Auth.AuthService;
 import jakarta.validation.Valid;
@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,18 +34,16 @@ public class UserController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    public ApiResponse<?> editUser(@RequestBody @Valid SignupDTO user, BindingResult result) {
-        User authUser = authService.getAuthUser();
+    public ApiResponse<?> editUser(@Valid @RequestBody UserEditDto userEditDto, BindingResult result) {
         if (result.hasErrors()) {
-            throw new ValidationException(result.getAllErrors()
+            List<String> errors = result.getAllErrors()
                     .stream()
                     .map(ObjectError::getDefaultMessage)
-                    .collect(Collectors.toList()), "Validation Failed");
+                    .collect(Collectors.toList());
+            throw new ValidationException(errors, "Validation Failed");
         }
-        authUser.setEmail(user.getEmail());
-        authUser.setUsername(user.getUsername());
-        authUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        authService.editUser(authUser);
+
+        authService.editUser(userEditDto);
         return new ApiResponse<>(true, HttpStatus.OK, "User updated", null);
     }
 
@@ -54,5 +52,10 @@ public class UserController {
         User user = authService.getAuthUser();
         authService.deleteUser(user);
         return new ApiResponse<>(true, HttpStatus.OK, "User deleted", null);
+    }
+
+    @ExceptionHandler({ValidationException.class, DataNotFoundException.class})
+    public ResponseEntity<?> handleValidationException(ValidationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getErrorResponse());
     }
 }

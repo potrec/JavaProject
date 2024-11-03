@@ -1,9 +1,6 @@
 package com.example.Wordle.services.Auth;
 
-import com.example.Wordle.dtos.LoginDTO;
-import com.example.Wordle.dtos.UserLoginResponseDTO;
-import com.example.Wordle.dtos.UserRegistrationDTO;
-import com.example.Wordle.dtos.UserResponseDTO;
+import com.example.Wordle.dtos.*;
 import com.example.Wordle.exceptions.DataNotFoundException;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.Role;
@@ -71,6 +68,7 @@ public class AuthServiceImplementation implements AuthService {
             userResponseDTO.id = user.getUserId();
             userResponseDTO.username = user.getUsername();
             userResponseDTO.email = user.getEmail();
+
             return new UserLoginResponseDTO(userResponseDTO, token);
         } catch (Exception e) {
             throw new DataNotFoundException(e.getMessage());
@@ -84,22 +82,29 @@ public class AuthServiceImplementation implements AuthService {
         return userRepository.findByUsername(userName).orElseThrow(() -> new DataNotFoundException("No user with given username "+ userName+" is found"));
     }
 
-    public User editUser(User user) {
-        Optional<User> userByEmail = userRepository.findByEmail(user.getEmail());
-        if(userByEmail.isPresent() && !userByEmail.get().getUsername().equals(user.getUsername())){
+    public User editUser(UserEditDto userEditDto) {
+        User authUser = getAuthUser();
+        Optional<User> userByEmail = userRepository.findByEmail(userEditDto.getEmail());
+
+        if(userByEmail.isPresent() && !userByEmail.get().getUserId().equals(authUser.getUserId())){
             throw new ValidationException(Collections.singletonList("Email is already taken"), "Email is already taken");
         }
 
-        Optional<User> userByUsername = userRepository.findByUsername(user.getUsername());
-        if(userByUsername.isPresent() && !userByUsername.get().getUsername().equals(user.getUsername())){
+        Optional<User> userByUsername = userRepository.findByUsername(userEditDto.getUsername());
+        if(userByUsername.isPresent() && !userByUsername.get().getUserId().equals(authUser.getUserId())){
             throw new ValidationException(Collections.singletonList("Username is already taken"), "Username is already taken");
         }
 
-        return userRepository.save(user);
+        authUser.setEmail(userEditDto.getEmail());
+        authUser.setUsername(userEditDto.getUsername());
+        authUser.setPassword(passwordEncoder.encode(userEditDto.getPassword()));
+
+        return userRepository.save(authUser);
     }
 
     public String deleteUser(User user){
         userRepository.delete(user);
+
         return "User deleted successfully";
     }
 }
