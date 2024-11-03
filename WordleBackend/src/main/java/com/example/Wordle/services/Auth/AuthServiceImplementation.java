@@ -9,6 +9,8 @@ import com.example.Wordle.repository.RoleRepository;
 import com.example.Wordle.repository.UserRepository;
 import com.example.Wordle.services.Token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -79,7 +82,13 @@ public class AuthServiceImplementation implements AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         String userName = jwt.getSubject();
-        return userRepository.findByUsername(userName).orElseThrow(() -> new DataNotFoundException("No user with given username "+ userName+" is found"));
+        System.out.println("Extracted username from JWT: " + userName); // Add logging
+
+        Optional<User> userOptional = userRepository.findByUsername(userName);
+        if (userOptional.isEmpty()) {
+            throw new DataNotFoundException("No user with given username " + userName + " is found");
+        }
+        return userOptional.get();
     }
 
     public User editUser(UserEditDto userEditDto) {
@@ -104,7 +113,6 @@ public class AuthServiceImplementation implements AuthService {
 
     public String deleteUser(User user){
         userRepository.delete(user);
-
         return "User deleted successfully";
     }
 }

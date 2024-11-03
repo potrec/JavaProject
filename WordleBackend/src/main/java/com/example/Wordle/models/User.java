@@ -1,5 +1,6 @@
 package com.example.Wordle.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements UserDetails {
 
     @Id
