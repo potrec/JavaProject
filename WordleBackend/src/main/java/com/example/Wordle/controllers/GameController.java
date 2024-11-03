@@ -2,7 +2,7 @@ package com.example.Wordle.controllers;
 
 import com.example.Wordle.dtos.GuessWordDTO;
 import com.example.Wordle.dtos.WordDTO;
-import com.example.Wordle.exceptions.CustomDataNotFoundException;
+import com.example.Wordle.exceptions.DataNotFoundException;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.Game;
 import com.example.Wordle.models.Word;
@@ -52,7 +52,7 @@ public class GameController {
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.toList()), body.getWord());
         }
-        Game game = gameRepository.findById(body.getGameId()).orElseThrow(() -> new CustomDataNotFoundException("Game not found"));
+        Game game = gameRepository.findById(body.getGameId()).orElseThrow(() -> new DataNotFoundException("Game not found"));
         if(game.isFinished()) return ResponseEntity.ok("Game already finished");
         return ResponseEntity.ok(gameService.guessWord(body, game));
     }

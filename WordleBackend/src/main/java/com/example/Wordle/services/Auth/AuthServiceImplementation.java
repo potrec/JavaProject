@@ -4,7 +4,7 @@ import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.UserLoginResponseDTO;
 import com.example.Wordle.dtos.UserRegistrationDTO;
 import com.example.Wordle.dtos.UserResponseDTO;
-import com.example.Wordle.exceptions.CustomDataNotFoundException;
+import com.example.Wordle.exceptions.DataNotFoundException;
 import com.example.Wordle.exceptions.ValidationException;
 import com.example.Wordle.models.Role;
 import com.example.Wordle.models.User;
@@ -54,14 +54,13 @@ public class AuthServiceImplementation implements AuthService {
         authorities.add(userRole.get());
         User user = new User(userRegistrationDTO.getUsername(), encodedPassword, userRegistrationDTO.getEmail(),authorities);
         return userRepository.save(user);
-
     }
 
     @Override
-    public UserLoginResponseDTO login(LoginDTO loginDTO) {
+    public UserLoginResponseDTO login(LoginDTO loginDTO) throws ValidationException, DataNotFoundException {
         User user = userRepository.findByUsername(loginDTO.getUsername()).orElseThrow(() -> new ValidationException(Collections.singletonList("No user with given username is found"),"Invalid Credentials"));
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            throw new ValidationException(Collections.singletonList("Wrong password for this user"),"Invalid Credentials");
+            throw new ValidationException(Collections.singletonList("Invalid Password"), "Invalid Credentials");
         }
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
@@ -74,7 +73,7 @@ public class AuthServiceImplementation implements AuthService {
             userResponseDTO.email = user.getEmail();
             return new UserLoginResponseDTO(userResponseDTO, token);
         } catch (Exception e) {
-            throw new CustomDataNotFoundException(e.getMessage());
+            throw new DataNotFoundException(e.getMessage());
         }
     }
 
@@ -82,15 +81,25 @@ public class AuthServiceImplementation implements AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         String userName = jwt.getSubject();
-        return userRepository.findByUsername(userName).orElseThrow(() -> new CustomDataNotFoundException("No user with given username "+ userName+" is found"));
+        return userRepository.findByUsername(userName).orElseThrow(() -> new DataNotFoundException("No user with given username "+ userName+" is found"));
     }
 
     public User editUser(User user) {
+        Optional<User> userByEmail = userRepository.findByEmail(user.getEmail());
+        if(userByEmail.isPresent() && !userByEmail.get().getUsername().equals(user.getUsername())){
+            throw new ValidationException(Collections.singletonList("Email is already taken"), "Email is already taken");
+        }
+
+        Optional<User> userByUsername = userRepository.findByUsername(user.getUsername());
+        if(userByUsername.isPresent() && !userByUsername.get().getUsername().equals(user.getUsername())){
+            throw new ValidationException(Collections.singletonList("Username is already taken"), "Username is already taken");
+        }
+
         return userRepository.save(user);
     }
 
     public String deleteUser(User user){
         userRepository.delete(user);
-        return "user deleted";
+        return "User deleted successfully";
     }
 }

@@ -3,12 +3,14 @@ package com.example.Wordle.controllers;
 import com.example.Wordle.dtos.LoginDTO;
 import com.example.Wordle.dtos.UserLoginResponseDTO;
 import com.example.Wordle.dtos.UserRegistrationDTO;
-import com.example.Wordle.exceptions.CustomDataNotFoundException;
+import com.example.Wordle.exceptions.DataNotFoundException;
+import com.example.Wordle.exceptions.ErrorResponse;
 import com.example.Wordle.exceptions.ValidationException;
-import com.example.Wordle.models.User;
+import com.example.Wordle.responses.ApiResponse;
 import com.example.Wordle.services.Auth.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -22,34 +24,33 @@ import java.util.stream.Collectors;
 public class AuthController {
     @Autowired
     private AuthService authService;
-    @PostMapping("/")
-    public ResponseEntity<?> test()
-    {
-        return ResponseEntity.ok("dfghdfghdfghdfg");
-    }
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserRegistrationDTO body, BindingResult result) {
+    public ApiResponse<?> createUser(@Valid @RequestBody UserRegistrationDTO body, BindingResult result) {
         if (result.hasErrors()) {
             throw new ValidationException(result.getAllErrors()
                     .stream()
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.toList()), "Validation Failed");
         }
-        User createdUser;
         try {
-            createdUser = authService.registerUser(body);
+            authService.registerUser(body);
         }
         catch(Exception e)
         {
-            throw new CustomDataNotFoundException(e.getMessage());
+            throw new DataNotFoundException(e.getMessage());
         }
-        return ResponseEntity.ok("User created successfully");
+        return new ApiResponse<>(true,HttpStatus.OK,"User created successfully",null);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ApiResponse<?> login(@Valid @RequestBody LoginDTO loginDTO) {
         UserLoginResponseDTO user = authService.login(loginDTO);
-        return ResponseEntity.ok(user);
+        return new ApiResponse<>(true, HttpStatus.OK, "User logged in successfully", user);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<?> handleValidationException(ValidationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getErrorResponse());
     }
 }

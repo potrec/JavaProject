@@ -1,6 +1,7 @@
 package com.example.Wordle.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -11,22 +12,14 @@ import java.util.List;
 @Getter
 @Setter
 public class ErrorResponse {
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    private Date timestamp;
-
-    private int code;
-
+    private boolean success = false;
+    private int responseCode;
     private String status;
-
-    private String message;
-
+    private String responseMessage;
     private String stackTrace;
-
     private List<String> errors;
 
-    public ErrorResponse() {
-        timestamp = new Date();
-    }
+    public ErrorResponse() {}
 
     public ErrorResponse(
             HttpStatus httpStatus,
@@ -34,9 +27,9 @@ public class ErrorResponse {
     ) {
         this();
 
-        this.code = httpStatus.value();
+        this.responseCode = httpStatus.value();
         this.status = httpStatus.name();
-        this.message = message;
+        this.responseMessage = message;
     }
 
     public ErrorResponse(
