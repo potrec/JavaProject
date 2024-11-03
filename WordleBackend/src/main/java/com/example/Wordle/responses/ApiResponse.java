@@ -10,14 +10,18 @@ import org.springframework.http.HttpStatus;
 public class ApiResponse<T> {
     @JsonProperty("success")
     private boolean success;
-
     @JsonProperty("responseCode")
-    private HttpStatus responseCode;
-
+    private int responseCode;
     @JsonProperty("responseMessage")
     private String responseMessage;
-
     @JsonProperty("data")
     private T data;
+
+    public ApiResponse(boolean success, HttpStatus responseCode, String responseMessage, T data) {
+        this.success = success;
+        this.responseCode = responseCode.value();
+        this.responseMessage = responseMessage;
+        this.data = data;
+    }
 }
 
