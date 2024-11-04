@@ -78,6 +78,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import axios, { type AxiosResponse } from 'axios'
 import { ref } from 'vue'
 import type { ErrorData } from '@/interfaces/ErrorData'
+import { useLocalStorage } from '@vueuse/core'
 
 interface LoginData {
   username: string
@@ -107,6 +108,8 @@ const form = useForm<LoginData>({
   validationSchema: formSchema,
 })
 
+const jwtToken = useLocalStorage('jwt', '')
+
 const onSubmit = form.handleSubmit(async (values: LoginData) => {
   const HOST = import.meta.env.VITE_API_HOST
   const PORT = import.meta.env.VITE_API_PORT
@@ -122,10 +125,8 @@ const onSubmit = form.handleSubmit(async (values: LoginData) => {
         },
       },
     )
+    jwtToken.value = response.data.data.jwt
 
-    console.log('Login successful:', response.data)
-    localStorage.setItem('user', response.data.user)
-    localStorage.setItem('jwt', response.data.token)
   } catch (error) {
     errorData.value = {
       message: error.response.data.message,
