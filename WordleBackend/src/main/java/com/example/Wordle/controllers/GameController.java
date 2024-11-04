@@ -89,6 +89,11 @@ public class GameController {
         return new ApiResponse<>(true, HttpStatus.OK,"Games found",gameDtos);
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    public ApiResponse<?> test() {
+        return new ApiResponse<>(true, HttpStatus.OK, "Test successful", null);
+    }
+
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<?> handleValidationException(ValidationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getErrorResponse());

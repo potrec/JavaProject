@@ -79,6 +79,7 @@ import axios, { type AxiosResponse } from 'axios'
 import { ref } from 'vue'
 import type { ErrorData } from '@/interfaces/ErrorData'
 import { useLocalStorage } from '@vueuse/core'
+import router from '@/router'
 
 interface LoginData {
   username: string
@@ -126,13 +127,14 @@ const onSubmit = form.handleSubmit(async (values: LoginData) => {
       },
     )
     jwtToken.value = response.data.data.jwt
-
   } catch (error) {
     errorData.value = {
       message: error.response.data.message,
       errors: error.response.data.errors,
       statusCode: error.response.status,
     }
+  } finally {
+    await router.push('/main')
   }
 })
 </script>
