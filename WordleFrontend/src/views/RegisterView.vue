@@ -1,5 +1,5 @@
 <template>
-  <div class="w-1/3 mt-12">
+  <div class="mt-12">
     <form @submit="onSubmit" class="space-y-4">
       <FormField v-slot="{ componentField }" name="username">
         <FormItem>
