@@ -59,8 +59,8 @@ const createGame = async () => {
   try {
     const response: AxiosResponse = await axios.post(`${HOST}:${PORT}/api/v1/game/create`,'',config)
     const gameData: GameData = response.data.data
-    console.log(gameData)
-    //await router.push({ name: 'game', params: { id: gameData.gameId }, query: { gameData: JSON.stringify(gameData) } })
+
+    await router.push({ name: 'game', params: { id: gameData.gameId }})
   } catch (error) {
     console.error(error)
   } finally {
