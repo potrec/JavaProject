@@ -29,5 +29,5 @@ body {
 }
 
 #app {
-  @apply w-full flex items-center justify-center px-12 flex-col;
+  @apply w-full flex items-center justify-center flex-col;
 }

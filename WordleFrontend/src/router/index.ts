@@ -28,12 +28,17 @@ const router = createRouter({
       path: '/game/:id',
       name: 'game',
       component: () => import('../views/GameView.vue'),
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/AboutView.vue'),
     }
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/']
+  const publicPages = ['/login', '/register', '/', '/about']
   const authRequired = !publicPages.includes(to.path)
   const loggedIn = localStorage.getItem('jwt')
 

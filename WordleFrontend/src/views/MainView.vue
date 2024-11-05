@@ -1,6 +1,6 @@
 <template>
-  <div class="main flex justify-center items-center h-screen overflow-hidden">
-    <div class="flex flex-col space-y-3 max-w-screen-md w-full text-center">
+  <div class="main flex justify-center items-center h-full">
+    <div class="flex flex-col space-y-3 max-w-screen-md w-full text-center p-2">
       <h1 class="text-5xl font-bold">Welcome to Worlde game</h1>
       <h2 class="text-2xl font-semibold">Guess the 5-letter word in 6 moves and win</h2>
       <div class="flex justify-evenly">
@@ -48,7 +48,7 @@ const getAuthUserGames = async () => {
 const createGame = async () => {
   const HOST = import.meta.env.VITE_API_HOST
   const PORT = import.meta.env.VITE_API_PORT
-  let config = {
+  const config = {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
@@ -57,9 +57,9 @@ const createGame = async () => {
   }
 
   try {
-    const response: AxiosResponse = await axios.post(`http://localhost:8080/api/v1/game/create`,'',config)
-    //const gameData = response.data.data
-    console.log(response.data.data)
+    const response: AxiosResponse = await axios.post(`${HOST}:${PORT}/api/v1/game/create`,'',config)
+    const gameData: GameData = response.data.data
+    console.log(gameData)
     //await router.push({ name: 'game', params: { id: gameData.gameId }, query: { gameData: JSON.stringify(gameData) } })
   } catch (error) {
     console.error(error)
