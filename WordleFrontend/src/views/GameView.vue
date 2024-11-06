@@ -4,41 +4,24 @@ import GameGridComponent from '@/components/game/GameGridComponent.vue'
 import GameKeyboardComponent from '@/components/game/GameKeyboardComponent.vue'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
 import type { GameData } from '@/interfaces/GameData'
-import type { GameGuessData } from '@/interfaces/GameGuessData'
+import { fetchGameData } from '@/utils/fetchGameData'
+import { Button } from '@/components/ui/button'
 
 const router = useRoute()
 const gameData = ref<GameData>()
 const loading = ref(true)
-
-onMounted(() => {
-  fetchGameData()
-})
-
-const fetchGameData = async () => {
-  const HOST = import.meta.env.VITE_API_HOST
-  const PORT = import.meta.env.VITE_API_PORT
+const show = ref(false)
+onMounted(async () => {
   const gameId = router.params.id
-
   try {
-    const response = await axios.get(`${HOST}:${PORT}/api/v1/game/${gameId}`, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-      },
-    })
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    gameData.value = response.data.data
+    gameData.value = await fetchGameData(gameId)
   } catch (error) {
     console.error(error)
   } finally {
     loading.value = false
   }
-}
-
-const gameGuessData = ref<GameGuessData>()
-
+})
 
 </script>
 
@@ -50,6 +33,12 @@ const gameGuessData = ref<GameGuessData>()
     </div>
     <div v-else>
       <GameGridComponent :gameData="gameData"/>
+      <div class="flex justify-center space-x-4">
+        <Button @click="show = !show">Show answer</Button>
+      </div>
+      <div v-if="show" class="text-center">
+        <p class="text-2xl font-bold">Answer: {{ gameData.word }}</p>
+      </div>
       <GameKeyboardComponent/>
     </div>
   </div>
