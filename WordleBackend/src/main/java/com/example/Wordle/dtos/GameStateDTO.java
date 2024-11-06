@@ -19,4 +19,5 @@ public class GameStateDTO {
     boolean finished;
     boolean status;
     private List<Integer> wordGuesses;
+    private String word;
 }

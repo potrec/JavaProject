@@ -77,6 +77,7 @@ public class GameServiceImplementation implements GameService {
         gameStateDTO.setGameGuessId(wordGuess.getGameGuessId());
         List<Integer> charStatus = getCharStatus(body, game);
         gameStateDTO.setWordGuesses(charStatus);
+        gameStateDTO.setWord(body.getWord());
         return gameStateDTO;
     }
 

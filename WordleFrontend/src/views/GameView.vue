@@ -39,26 +39,7 @@ const fetchGameData = async () => {
 
 const gameGuessData = ref<GameGuessData>()
 
-const guessWord = async () => {
-  const HOST = import.meta.env.VITE_API_HOST
-  const PORT = import.meta.env.VITE_API_PORT
 
-  try {
-    const response = await axios.post(
-      `${HOST}:${PORT}/api/v1/game/guess`,
-      { gameGuessData },
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-        },
-      },
-    )
-    gameData.value = response.data.data
-  } catch (error) {
-    console.error(error)
-  }
-}
 </script>
 
 <template>
