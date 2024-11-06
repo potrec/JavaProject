@@ -1,5 +1,6 @@
 package com.example.Wordle.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +19,7 @@ public class GameGuess {
     private Long gameGuessId;
     @ManyToOne
     @JoinColumn(name = "game_id")
+    @JsonIgnore
     private Game game;
     @Column(name = "guess_number")
     private int guessNumber;

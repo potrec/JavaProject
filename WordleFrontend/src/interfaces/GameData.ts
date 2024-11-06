@@ -1,3 +1,5 @@
+import type { GameGuessData } from '@/interfaces/GameGuessData'
+
 interface GameData {
   gameId: number;
   userId: number;
@@ -5,6 +7,7 @@ interface GameData {
   attempts: number;
   status: boolean;
   date: string;
+  gameGuesses: GameGuessData[];
 }
 
 export type { GameData }

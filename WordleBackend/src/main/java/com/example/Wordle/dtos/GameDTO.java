@@ -1,12 +1,14 @@
 package com.example.Wordle.dtos;
 
 import com.example.Wordle.models.Game;
+import com.example.Wordle.models.GameGuess;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,6 +21,7 @@ public class GameDTO {
     private Integer attempts;
     private boolean status;
     private LocalDateTime date;
+    private Set<GameGuess> gameGuesses;
 
     public GameDTO(Game game) {
         this.gameId = game.getId();
@@ -27,5 +30,6 @@ public class GameDTO {
         this.attempts = game.getAttempts();
         this.status = game.isStatus();
         this.date = game.getDate();
+        this.gameGuesses = game.getGameGuesses();
     }
 }

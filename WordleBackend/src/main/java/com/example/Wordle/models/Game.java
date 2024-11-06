@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "games")
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"user", "gameGuesses"})
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -25,7 +25,8 @@ public class Game {
     @OneToOne
     @JoinColumn(name = "word_id")
     private Word word;
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    @OrderBy("guessNumber ASC")
     private Set<GameGuess> gameGuesses;
     private int attempts;
     private boolean status;

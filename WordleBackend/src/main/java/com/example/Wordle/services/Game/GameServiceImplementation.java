@@ -42,7 +42,7 @@ public class GameServiceImplementation implements GameService {
         game.setDate(LocalDateTime.now());
         game.setUser(authService.getAuthUser());
         gameRepository.save(game);
-        return new GameDTO(game.getId(), game.getUser().getUserId(), word.getWord(), game.getAttempts(), true,game.getDate());
+        return new GameDTO(game.getId(), game.getUser().getUserId(), word.getWord(), game.getAttempts(), true,game.getDate(),game.getGameGuesses());
     }
 
     public GameStateDTO guessWord(GuessWordDTO body, Game game) {

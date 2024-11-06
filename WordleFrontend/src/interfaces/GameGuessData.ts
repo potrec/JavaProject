@@ -1,6 +1,8 @@
 interface GameGuessData {
-  gameId: number;
-  guess: string;
+  gameGuessId: number;
+  guessNumber: number;
+  word: string;
+  result: string;
 }
 
 export type { GameGuessData }
