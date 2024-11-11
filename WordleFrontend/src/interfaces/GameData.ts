@@ -6,6 +6,7 @@ interface GameData {
   word: string;
   attempts: number;
   status: boolean;
+  finished: boolean;
   date: string;
   gameGuesses: GameGuessData[];
 }

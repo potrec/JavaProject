@@ -5,12 +5,8 @@
       <h2 class="text-2xl font-semibold">Guess the 5-letter word in 6 moves and win</h2>
       <div class="flex justify-evenly">
         <Button @click="createGame">Play Game</Button>
-        <Button @click="getAuthUserGames">View Games</Button>
-        <Button href="/profile">View Profile</Button>
-      </div>
-      <Skeleton v-if="loading" />
-      <div v-else>
-        <p v-for="game in games" :key="game.gameId">{{ game }}</p>
+        <Button><a href="/games">View Games</a></Button>
+        <Button><a href="/profile">Profile</a></Button>
       </div>
     </div>
   </div>
@@ -19,7 +15,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import axios, { type AxiosResponse } from 'axios'
-import { Skeleton } from '@/components/ui/skeleton'
 import type { GameData } from '@/interfaces/GameData'
 import { Button } from '@/components/ui/button'
 import router from '@/router'

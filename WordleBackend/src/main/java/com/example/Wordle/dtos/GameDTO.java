@@ -20,6 +20,7 @@ public class GameDTO {
     private String word;
     private Integer attempts;
     private boolean status;
+    private boolean finished;
     private LocalDateTime date;
     private Set<GameGuess> gameGuesses;
 
@@ -29,6 +30,7 @@ public class GameDTO {
         this.word = game.getWord().getWord();
         this.attempts = game.getAttempts();
         this.status = game.isStatus();
+        this.finished = game.isFinished();
         this.date = game.getDate();
         this.gameGuesses = game.getGameGuesses();
     }

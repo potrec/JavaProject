@@ -20,7 +20,7 @@ const guessWord = async (gameGuessData: GameGuessDto) => {
       },
     )
   } catch (error) {
-    console.error(error.response)
+    throw error
   }
 }
 

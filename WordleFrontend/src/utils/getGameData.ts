@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const fetchGameData = async (gameId: number) => {
+const getGameData = async (gameId: number) => {
   const HOST = import.meta.env.VITE_API_HOST
   const PORT = import.meta.env.VITE_API_PORT
 
@@ -18,4 +18,4 @@ const fetchGameData = async (gameId: number) => {
   }
 }
 
-export { fetchGameData }
+export { getGameData }

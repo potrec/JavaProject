@@ -33,6 +33,11 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
+    },
+    {
+      path: '/games',
+      name: 'games',
+      component: () => import('../views/GamesView.vue'),
     }
   ],
 })
@@ -40,6 +45,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const publicPages = ['/login', '/register', '/', '/about']
   const authRequired = !publicPages.includes(to.path)
+  window.history.pushState(null, '', window.location.href);
   if (authRequired && !isAuthenticated()) {
     console.log('Not authenticated')
     return next('/login')

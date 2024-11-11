@@ -5,7 +5,7 @@ import GameKeyboardComponent from '@/components/game/GameKeyboardComponent.vue'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useRoute } from 'vue-router'
 import type { GameData } from '@/interfaces/GameData'
-import { fetchGameData } from '@/utils/fetchGameData'
+import { getGameData } from '@/utils/getGameData'
 import { Button } from '@/components/ui/button'
 
 const router = useRoute()
@@ -15,7 +15,7 @@ const show = ref(false)
 onMounted(async () => {
   const gameId = router.params.id
   try {
-    gameData.value = await fetchGameData(gameId)
+    gameData.value = await getGameData(gameId)
   } catch (error) {
     console.error(error)
   } finally {
