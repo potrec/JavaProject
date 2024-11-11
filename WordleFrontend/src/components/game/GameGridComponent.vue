@@ -67,6 +67,7 @@ addEventListener('keydown', async (event) => {
   }
   if (event.key === 'Enter') {
     if (input.value.length === 5) {
+      console.log('before guess:', gameData.value)
       const gameGuessData: GameGuessDto = {
         word: input.value,
         gameId: gameData.value.gameId,
@@ -74,8 +75,9 @@ addEventListener('keydown', async (event) => {
       await guessWord(gameGuessData)
       const data = await getGameData(gameData.value.gameId)
       input.value = ''
-      attempt.value = data.attempts
-      console.log('getGameData:', data)
+      console.log('after guess:', gameData.value)
+      gameData.value = data
+      console.log('getGameData:', gameData)
     } else {
       console.log('Word is too short')
     }
@@ -102,10 +104,12 @@ addEventListener('keydown', async (event) => {
 })
 
 watch(input, (newValue) => {
-  grid.value[attempt.value] = Array.from({ length: 5 }, () => '')
-  newValue.split('').forEach((letter, index) => {
-    grid.value[attempt.value][index] = letter
-  })
+  if (attempt.value < grid.value.length) {
+    grid.value[attempt.value] = Array.from({ length: 5 }, () => '')
+    newValue.split('').forEach((letter, index) => {
+      grid.value[attempt.value][index] = letter
+    })
+  }
 })
 </script>
 
@@ -130,7 +134,7 @@ watch(input, (newValue) => {
       </div>
     </div>
   </div>
-  <AlertDialog v-model:default-open="gameData.finished">
+  <AlertDialog v-model:default-open=gameData.finished v-model:onOpenChange="gameData.finished">
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>Game is over</AlertDialogTitle>

@@ -41,9 +41,9 @@
         <div class="flex items-center space-x-2">
           <Button type="submit">Submit</Button>
           <Button variant="link" href="/register">
-            <a href="/register" class="text-sm font-medium leading-none">
+            <RouterLink to="/register" class="text-sm font-medium leading-none">
               No account? Sign In
-            </a></Button
+            </RouterLink></Button
           >
         </div>
       </FormItem>

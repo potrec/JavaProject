@@ -63,10 +63,6 @@ const createGame = async () => {
   }
 }
 
-const logout = () => {
-  localStorage.removeItem('jwt')
-  router.push('/home')
-}
 onMounted(() => {
   getAuthUserGames()
 });

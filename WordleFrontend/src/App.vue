@@ -13,7 +13,7 @@ import Button from '@/components/ui/button/Button.vue'
       <Button><RouterLink to="/login">Login</RouterLink></Button>
     </nav>
     <div class="flex-grow">
-      <RouterView />
+      <RouterView :key="$route.fullPath" />
     </div>
   </div>
 </template>
