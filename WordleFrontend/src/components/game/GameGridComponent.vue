@@ -1,12 +1,24 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import type { GameData } from '@/interfaces/GameData'
-import type { GameGuessData } from '@/interfaces/GameGuessData'
 import { guessWord } from '@/utils/guessWord'
 import type { GameGuessDto } from '@/interfaces/GameGuessDto'
-import { fetchGameData } from '@/utils/fetchGameData'
+import { getGameData } from '@/utils/getGameData'
+import { useRoute } from 'vue-router'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 
-const grid = ref(Array.from({ length: 5 }, () => Array(5).fill('')))
+const router = useRoute()
+const grid = ref(Array.from({ length: 6 }, () => Array(5).fill(''))) // 6 rows, 5 columns grid
 const colors: object = {
   basic: 'bg-gray-200',
   good: 'bg-green-400',
@@ -14,28 +26,36 @@ const colors: object = {
   none: 'bg-gray-400',
 }
 const props = defineProps<{ gameData: GameData }>()
-let arrayOfGuesses: GameGuessData[] = props.gameData.gameGuesses
-const attempt = ref(props.gameData.attempts)
+const gameData = ref(props.gameData)
+const gameId = router.params.id
+const attempt = ref(gameData.value.attempts)
+
+const gameStatus = ref(gameData.value.status)
+const showDialog = ref(false)
 const getColorClass = (columnIndex: number, cellIndex: number): string => {
-  if (grid.value[columnIndex][cellIndex] === '' || columnIndex >= attempt.value) {
+  if (grid.value[columnIndex][cellIndex] === '' || (columnIndex >= attempt.value)) {
     return colors.basic
   }
-  if (grid.value[columnIndex][cellIndex] === props.gameData.word.split('')[cellIndex]) {
+  if (grid.value[columnIndex][cellIndex] === gameData.value.word.split('')[cellIndex]) {
     return colors.good
   }
-  if (arrayOfGuesses[columnIndex].word.split('').includes(props.gameData.word.split('')[cellIndex])) {
+  if(grid.value[columnIndex].includes(gameData.value.word.split('')[cellIndex])) {
     return colors.wrongPlace
   }
   return colors.none
 }
-onMounted(() => {
-  console.log('arrayOfGuesses:', arrayOfGuesses)
-  arrayOfGuesses.forEach((guess, index) => {
+
+onBeforeMount(async () => {
+  console.log('gameData:', gameData.value)
+  if (!props.gameData) {
+    gameData.value = await getGameData(Number(gameId))
+  }
+  gameData.value.gameGuesses.forEach((guess, index) => {
     guess.word.split('').forEach((letter, letterIndex) => {
       grid.value[index][letterIndex] = letter
     })
   })
-  console.log('grid:', grid.value)
+  console.log('gameData:', gameData.value)
 })
 const input = ref('')
 
@@ -43,19 +63,22 @@ addEventListener('keydown', async (event) => {
   const letterArray = ['a', 'ą', 'b', 'c', 'ć', 'd', 'e', 'ę', 'f', 'g', 'h', 'i',
     'j', 'k', 'l', 'ł', 'm', 'n', 'ń', 'o', 'ó', 'p', 'q', 'r', 's', 'ś', 't', 'u', 'v',
     'w', 'x', 'y', 'z', 'ź', 'ż']
-
+  if(gameData.value.finished)
+  {
+    console.log('Game has ended')
+    return false
+  }
   if (event.key === 'Enter') {
     if (input.value.length === 5) {
       const gameGuessData: GameGuessDto = {
         word: input.value,
-        gameId: props.gameData.gameId,
+        gameId: gameData.value.gameId,
       }
       await guessWord(gameGuessData)
-      const data = await fetchGameData(props.gameData.gameId)
+      const data = await getGameData(gameData.value.gameId)
       input.value = ''
-      arrayOfGuesses = data.gameGuesses
       attempt.value = data.attempts
-      console.log('fetchGameData:', data)
+      console.log('getGameData:', data)
     } else {
       console.log('Word is too short')
     }
@@ -81,14 +104,11 @@ addEventListener('keydown', async (event) => {
 })
 
 watch(input, (newValue) => {
-  console.log('input:', newValue)
   grid.value[attempt.value] = Array.from({ length: 5 }, () => '')
   newValue.split('').forEach((letter, index) => {
     grid.value[attempt.value][index] = letter
   })
-  console.log('grid:', grid.value)
 })
-console.log('arrayOfGuesses:', props.gameData)
 </script>
 
 <template>
@@ -112,6 +132,20 @@ console.log('arrayOfGuesses:', props.gameData)
       </div>
     </div>
   </div>
+  <AlertDialog v-model:default-open="gameData.finished">
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Game is over</AlertDialogTitle>
+        <AlertDialogDescription>
+          You cannot play this game anymore because you have used all attempts. Click on the button below to return to the main view or close the dialog to look how the word was guessed.
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>Close</AlertDialogCancel>
+        <AlertDialogAction><a href="/main">Return </a></AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>
 
 <style scoped></style>

@@ -7,6 +7,7 @@ import Button from '@/components/ui/button/Button.vue'
   <div class="app-container flex flex-col h-screen">
     <nav class="flex justify-evenly space-x-2 h-16">
       <Button><RouterLink to="/">Home</RouterLink></Button>
+      <Button><RouterLink to="/main">Main</RouterLink></Button>
       <Button><RouterLink to="/about">About</RouterLink></Button>
       <Button><RouterLink to="/register">Sign up</RouterLink></Button>
       <Button><RouterLink to="/login">Login</RouterLink></Button>
