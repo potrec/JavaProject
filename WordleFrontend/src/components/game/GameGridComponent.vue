@@ -14,7 +14,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 
 const router = useRoute()
@@ -30,8 +29,6 @@ const gameData = ref(props.gameData)
 const gameId = router.params.id
 const attempt = ref(gameData.value.attempts)
 
-const gameStatus = ref(gameData.value.status)
-const showDialog = ref(false)
 const getColorClass = (columnIndex: number, cellIndex: number): string => {
   if (grid.value[columnIndex][cellIndex] === '' || (columnIndex >= attempt.value)) {
     return colors.basic
@@ -92,6 +89,7 @@ addEventListener('keydown', async (event) => {
     }
   }
   if (event.key === 'Backspace') {
+    event.preventDefault()
     console.log('Backspace key pressed')
     input.value = input.value.slice(0, -1)
   }

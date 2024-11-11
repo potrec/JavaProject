@@ -119,7 +119,11 @@ const onSubmit = form.handleSubmit(async (values: RegisterData) => {
     )
 
     console.log('Register successful:', response.data)
-    await router.push('/login')
+    await router.push('/login').then(() => {
+      console.log('Navigation to login completed')
+    }).catch((error) => {
+      console.error('Navigation error:', error)
+    })
   } catch (error) {
     console.log(error)
     errorData.value = {
@@ -127,6 +131,8 @@ const onSubmit = form.handleSubmit(async (values: RegisterData) => {
       errors: error.response.data.errors,
       statusCode: error.response.status,
     }
+  } finally {
+    form.resetForm()
   }
 })
 </script>
