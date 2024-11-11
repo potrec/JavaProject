@@ -80,6 +80,7 @@ import { ref } from 'vue'
 import type { ErrorData } from '@/interfaces/ErrorData'
 import { useLocalStorage } from '@vueuse/core'
 import router from '@/router'
+import { setError } from '@/stores/errorStore'
 
 interface LoginData {
   username: string
@@ -135,7 +136,9 @@ const onSubmit = form.handleSubmit(async (values: LoginData) => {
     }
   } finally {
     console.log(jwtToken.value)
-    await router.push('/main')
+    await router.push('/main').catch((error) => {
+      setError(error)
+    })
   }
 })
 </script>
