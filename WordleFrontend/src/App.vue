@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Button from '@/components/ui/button/Button.vue'
+import { errorMessage, clearError } from '@/stores/errorStore'
+import ErrorPopup from '@/components/ui/error/ErrorPopupComponent.vue'
 </script>
 
 <template>
@@ -15,6 +17,7 @@ import Button from '@/components/ui/button/Button.vue'
     <div class="flex-grow">
       <RouterView :key="$route.fullPath" />
     </div>
+    <ErrorPopup v-if="errorMessage" :message="errorMessage" @close="clearError" />
   </div>
 </template>
 
