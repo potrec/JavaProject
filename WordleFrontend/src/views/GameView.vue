@@ -3,21 +3,27 @@ import { onMounted, ref } from 'vue'
 import GameGridComponent from '@/components/game/GameGridComponent.vue'
 import GameKeyboardComponent from '@/components/game/GameKeyboardComponent.vue'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import type { GameData } from '@/interfaces/GameData'
 import { getGameData } from '@/utils/getGameData'
 import { Button } from '@/components/ui/button'
+import { setError } from '@/stores/errorStore'
 
-const router = useRoute()
+const route = useRoute()
+const router = useRouter()
 const gameData = ref<GameData>()
 const loading = ref(true)
 const show = ref(false)
 onMounted(async () => {
-  const gameId = router.params.id
+  const gameId = route.params.id
   try {
     gameData.value = await getGameData(gameId)
   } catch (error) {
     console.error(error)
+      setError('Game not found or you do not have access to this game redirecting in 3 seconds')
+      setTimeout(() => {
+        router.push({ name: 'main' })
+      }, 3000)
   } finally {
     loading.value = false
   }
