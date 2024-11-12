@@ -21,7 +21,7 @@ const route = useRoute()
 const router = useRouter()
 const gameStore = useGameStore()
 const grid = ref(Array.from({ length: 6 }, () => Array(5).fill(''))) // 6 rows, 5 columns grid
-const colors: object = {
+const colors = {
   basic: 'bg-gray-200',
   good: 'bg-green-400',
   wrongPlace: 'bg-yellow-300',
@@ -41,6 +41,13 @@ const getColorClass = (columnIndex: number, cellIndex: number): string => {
     return colors.wrongPlace
   }
   return colors.none
+}
+
+const showPopup = ref(false)
+const checkWin = () => {
+  if (gameStore.gameData?.finished) {
+    showPopup.value = true
+  }
 }
 
 onBeforeMount(async () => {
@@ -85,6 +92,7 @@ addEventListener('keydown', async (event) => {
       input.value = ''
       gameStore.setGameData(data)
       attempt.value = gameStore.gameData?.attempts || 0
+      checkWin()
     } else {
       console.log('Word is too short')
     }
@@ -154,6 +162,36 @@ watch(input, (newValue) => {
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>
+  <transition name="popup">
+    <div v-if="showPopup" class="popup">
+      <h1 class="text-primary text-2xl">{{gameStore.gameData?.status ? "Congratulations! You won the game!" : "You lose, try again."}}</h1>
+    </div>
+  </transition>
 </template>
 
-<style scoped></style>
+<style scoped>
+.w-8 {
+  width: 2rem;
+}
+.h-16 {
+  height: 4rem;
+}
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 1000;
+}
+.popup-enter-active, .popup-leave-active {
+  transition: opacity 0.5s;
+}
+.popup-enter, .popup-leave-to {
+  opacity: 0;
+}
+</style>

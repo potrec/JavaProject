@@ -19,7 +19,7 @@ onMounted(async () => {
   const gameId = route.params.id
   try {
     const data = await getGameData(gameId)
-    await gameStore.setGameData(data)
+    gameStore.setGameData(data)
   } catch (error) {
     console.error(error)
     setError('Game not found or you do not have access to this game redirecting in 3 seconds')

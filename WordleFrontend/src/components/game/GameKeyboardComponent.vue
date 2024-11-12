@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, watch } from 'vue'
+import { watch } from 'vue'
 import { useGameStore } from '@/stores/gameData'
 
 const gameStore = useGameStore()
