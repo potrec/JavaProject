@@ -4,7 +4,7 @@ import type { GameData } from '@/interfaces/GameData'
 import { guessWord } from '@/utils/guessWord'
 import type { GameGuessDto } from '@/interfaces/GameGuessDto'
 import { getGameData } from '@/utils/getGameData'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,8 +15,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { setError } from '@/stores/errorStore'
 
-const router = useRoute()
+const route = useRoute()
+const router = useRouter()
 const grid = ref(Array.from({ length: 6 }, () => Array(5).fill(''))) // 6 rows, 5 columns grid
 const colors: object = {
   basic: 'bg-gray-200',
@@ -26,7 +28,7 @@ const colors: object = {
 }
 const props = defineProps<{ gameData: GameData }>()
 const gameData = ref(props.gameData)
-const gameId = router.params.id
+const gameId = route.params.id
 const attempt = ref(gameData.value.attempts)
 
 const getColorClass = (columnIndex: number, cellIndex: number): string => {
@@ -43,16 +45,23 @@ const getColorClass = (columnIndex: number, cellIndex: number): string => {
 }
 
 onBeforeMount(async () => {
-  console.log('gameData:', gameData.value)
   if (!props.gameData) {
-    gameData.value = await getGameData(Number(gameId))
+    try {
+      gameData.value = await getGameData(Number(gameId))
+    } catch (error) {
+      if (error) {
+        setError('Game not found or you do not have access to this game redirecting in 3 seconds')
+        setTimeout(() => {
+          router.push({ name: 'main' })
+        }, 3000)
+    }
+  }
   }
   gameData.value.gameGuesses.forEach((guess, index) => {
     guess.word.split('').forEach((letter, letterIndex) => {
       grid.value[index][letterIndex] = letter
     })
   })
-  console.log('gameData:', gameData.value)
 })
 const input = ref('')
 
@@ -67,7 +76,6 @@ addEventListener('keydown', async (event) => {
   }
   if (event.key === 'Enter') {
     if (input.value.length === 5) {
-      console.log('before guess:', gameData.value)
       const gameGuessData: GameGuessDto = {
         word: input.value,
         gameId: gameData.value.gameId,
@@ -75,9 +83,8 @@ addEventListener('keydown', async (event) => {
       await guessWord(gameGuessData)
       const data = await getGameData(gameData.value.gameId)
       input.value = ''
-      console.log('after guess:', gameData.value)
       gameData.value = data
-      console.log('getGameData:', gameData)
+      attempt.value = gameData.value.attempts
     } else {
       console.log('Word is too short')
     }
