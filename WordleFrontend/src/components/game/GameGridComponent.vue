@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onBeforeMount, ref, watch } from 'vue'
-import type { GameData } from '@/interfaces/GameData'
 import { guessWord } from '@/utils/guessWord'
 import type { GameGuessDto } from '@/interfaces/GameGuessDto'
 import { getGameData } from '@/utils/getGameData'
@@ -16,9 +15,11 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { setError } from '@/stores/errorStore'
+import { useGameStore } from '@/stores/gameData'
 
 const route = useRoute()
 const router = useRouter()
+const gameStore = useGameStore()
 const grid = ref(Array.from({ length: 6 }, () => Array(5).fill(''))) // 6 rows, 5 columns grid
 const colors: object = {
   basic: 'bg-gray-200',
@@ -26,38 +27,37 @@ const colors: object = {
   wrongPlace: 'bg-yellow-300',
   none: 'bg-gray-400',
 }
-const props = defineProps<{ gameData: GameData }>()
-const gameData = ref(props.gameData)
 const gameId = route.params.id
-const attempt = ref(gameData.value.attempts)
+const attempt = ref(gameStore.gameData?.attempts || 0)
 
 const getColorClass = (columnIndex: number, cellIndex: number): string => {
   if (grid.value[columnIndex][cellIndex] === '' || (columnIndex >= attempt.value)) {
     return colors.basic
   }
-  if (grid.value[columnIndex][cellIndex] === gameData.value.word.split('')[cellIndex]) {
+  if (grid.value[columnIndex][cellIndex] === gameStore.gameData?.word.split('')[cellIndex]) {
     return colors.good
   }
-  if(grid.value[columnIndex].includes(gameData.value.word.split('')[cellIndex])) {
+  if(grid.value[columnIndex].includes(gameStore.gameData?.word.split('')[cellIndex])) {
     return colors.wrongPlace
   }
   return colors.none
 }
 
 onBeforeMount(async () => {
-  if (!props.gameData) {
+  if (!gameStore.gameData) {
     try {
-      gameData.value = await getGameData(Number(gameId))
+      const data = await getGameData(Number(gameId))
+      gameStore.setGameData(data)
     } catch (error) {
       if (error) {
         setError('Game not found or you do not have access to this game redirecting in 3 seconds')
         setTimeout(() => {
           router.push({ name: 'main' })
         }, 3000)
+      }
     }
   }
-  }
-  gameData.value.gameGuesses.forEach((guess, index) => {
+  gameStore.gameData?.gameGuesses.forEach((guess, index) => {
     guess.word.split('').forEach((letter, letterIndex) => {
       grid.value[index][letterIndex] = letter
     })
@@ -69,7 +69,7 @@ addEventListener('keydown', async (event) => {
   const letterArray = ['a', 'ą', 'b', 'c', 'ć', 'd', 'e', 'ę', 'f', 'g', 'h', 'i',
     'j', 'k', 'l', 'ł', 'm', 'n', 'ń', 'o', 'ó', 'p', 'q', 'r', 's', 'ś', 't', 'u', 'v',
     'w', 'x', 'y', 'z', 'ź', 'ż']
-  if(gameData.value.finished)
+  if(gameStore.gameData?.finished)
   {
     console.log('Game has ended')
     return false
@@ -78,13 +78,13 @@ addEventListener('keydown', async (event) => {
     if (input.value.length === 5) {
       const gameGuessData: GameGuessDto = {
         word: input.value,
-        gameId: gameData.value.gameId,
+        gameId: gameStore.gameData?.gameId || 0,
       }
       await guessWord(gameGuessData)
-      const data = await getGameData(gameData.value.gameId)
+      const data = await getGameData(gameStore.gameData?.gameId || 0)
       input.value = ''
-      gameData.value = data
-      attempt.value = gameData.value.attempts
+      gameStore.setGameData(data)
+      attempt.value = gameStore.gameData?.attempts || 0
     } else {
       console.log('Word is too short')
     }
@@ -107,7 +107,6 @@ addEventListener('keydown', async (event) => {
     input.value = ''
   }
   console.log('input:', input.value)
-
 })
 
 watch(input, (newValue) => {
@@ -141,7 +140,7 @@ watch(input, (newValue) => {
       </div>
     </div>
   </div>
-  <AlertDialog v-model:default-open=gameData.finished v-model:onOpenChange="gameData.finished">
+  <AlertDialog :default-open="gameStore.gameData?.finished" @onUpdate:defaultOpen="gameStore.setFinished($event)">
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle>Game is over</AlertDialogTitle>
