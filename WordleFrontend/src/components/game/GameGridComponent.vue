@@ -45,12 +45,10 @@ const getColorClass = (columnIndex: number, cellIndex: number): string => {
 }
 
 onBeforeMount(async () => {
-  console.log('gameData:', gameData.value)
   if (!props.gameData) {
     try {
       gameData.value = await getGameData(Number(gameId))
     } catch (error) {
-      console.error('Error:', error)
       if (error) {
         setError('Game not found or you do not have access to this game redirecting in 3 seconds')
         setTimeout(() => {
@@ -64,7 +62,6 @@ onBeforeMount(async () => {
       grid.value[index][letterIndex] = letter
     })
   })
-  console.log('gameData:', gameData.value)
 })
 const input = ref('')
 
@@ -88,11 +85,6 @@ addEventListener('keydown', async (event) => {
       input.value = ''
       gameData.value = data
       attempt.value = gameData.value.attempts
-      // gameData.value.gameGuesses.forEach((guess, index) => {
-      //   guess.word.split('').forEach((letter, letterIndex) => {
-      //     grid.value[index][letterIndex] = letter
-      //   })
-      // })
     } else {
       console.log('Word is too short')
     }
