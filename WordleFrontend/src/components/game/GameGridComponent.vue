@@ -31,13 +31,14 @@ const gameId = route.params.id
 const attempt = ref(gameStore.gameData?.attempts || 0)
 
 const getColorClass = (columnIndex: number, cellIndex: number): string => {
+  console.log('checking color for', grid.value[columnIndex][cellIndex])
   if (grid.value[columnIndex][cellIndex] === '' || (columnIndex >= attempt.value)) {
     return colors.basic
   }
-  if (grid.value[columnIndex][cellIndex] === gameStore.gameData?.word.split('')[cellIndex]) {
+  if (gameStore.gameData?.word.split('')[cellIndex] === grid.value[columnIndex][cellIndex]) {
     return colors.good
   }
-  if(grid.value[columnIndex].includes(gameStore.gameData?.word.split('')[cellIndex])) {
+  if(gameStore.gameData?.word.split('').includes(grid.value[columnIndex][cellIndex])) {
     return colors.wrongPlace
   }
   return colors.none
