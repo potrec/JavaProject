@@ -1,7 +1,6 @@
 # Wordle
 
-Welcome to the Wordle project! The primary goal of this project is to provide a straightforward and enjoyable user experience for guessing words, while also serving as a learning opportunity for writing tests.
-
+Welcome to the Wordle project! The primary goal of this project is to provide a straightforward and enjoyable user experience for playing game where your task is to guess a words.
 ## Technologies Used
 
 ### Backend
@@ -18,7 +17,11 @@ Welcome to the Wordle project! The primary goal of this project is to provide a 
 
 
 ### Frontend
-- **SvelteKit:** Building the frontend with SvelteKit, a modern and intuitive framework for building web applications.
+- **Vue3:** Building the frontend with Vue3, a modern and intuitive framework for building web applications.
+- **Pinia:** Managing the state of the application with Pinia, a modern and lightweight alternative to Vuex.
+- **Vite:** Leveraging Vite for fast and efficient development, providing a lightning-fast development server.
+- **Tailwind CSS:** Styling the application with Tailwind CSS, a utility-first CSS framework for rapid development.
+- **Shadcn:** Beautifully designed components for Vue3, enhancing the user interface of the application.
 
 ## Getting Started
 
@@ -32,12 +35,14 @@ To run the Wordle Guessing Game locally, follow these steps:
 
 2. **Run Backend:**
    - Make sure you have Java installed.
+   - Make sure you have Docker installed.
    - Navigate to the backend directory, run docker database and then run the application.
    ```bash
    cd WordleBackend
    docker-compose up
    ./mvnw spring-boot:run
    ```
+   - If ```./mvnw spring-boot:run``` fails, you can run the application by installing IntelliJ IDEA and running the application from there.
 
 3. **Run Frontend:**
    - Make sure you have Node.js and npm installed.
@@ -46,13 +51,13 @@ To run the Wordle Guessing Game locally, follow these steps:
    cd frontend
    npm install
    ```
-   - Run the SvelteKit application.
+   - Run the Vue3 application.
    ```bash
    npm run dev
    ```
 
 4. **Access the Application:**
-   Open your browser and visit [http://localhost:5000](http://localhost:5000) to start playing the Wordle Guessing Game!
+   Open your browser and visit [http://localhost:5173](http://localhost:5000) to start playing the Wordle Guessing Game!
 
 ## Contributing
 
