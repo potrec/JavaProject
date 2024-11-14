@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
 import { guessWord } from '@/utils/guessWord'
 import type { GameGuessDto } from '@/interfaces/GameGuessDto'
 import { getGameData } from '@/utils/getGameData'
@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { setError } from '@/stores/errorStore'
 import { useGameStore } from '@/stores/gameData'
+import { Button } from '@/components/ui/button'
 
 const route = useRoute()
 const router = useRouter()
@@ -31,7 +32,6 @@ const gameId = route.params.id
 const attempt = ref(gameStore.gameData?.attempts || 0)
 
 const getColorClass = (columnIndex: number, cellIndex: number): string => {
-  console.log('checking color for', grid.value[columnIndex][cellIndex])
   if (grid.value[columnIndex][cellIndex] === '' || (columnIndex >= attempt.value)) {
     return colors.basic
   }
@@ -70,10 +70,13 @@ onBeforeMount(async () => {
       grid.value[index][letterIndex] = letter
     })
   })
+  console.log('Grid:', grid.value)
+  console.log('Game data:', gameStore.gameData)
+
 })
 const input = ref('')
 
-addEventListener('keydown', async (event) => {
+const handleKeydown = async (event: KeyboardEvent) => {
   const letterArray = ['a', 'ą', 'b', 'c', 'ć', 'd', 'e', 'ę', 'f', 'g', 'h', 'i',
     'j', 'k', 'l', 'ł', 'm', 'n', 'ń', 'o', 'ó', 'p', 'q', 'r', 's', 'ś', 't', 'u', 'v',
     'w', 'x', 'y', 'z', 'ź', 'ż']
@@ -83,6 +86,7 @@ addEventListener('keydown', async (event) => {
     return false
   }
   if (event.key === 'Enter') {
+    console.log('enter')
     if (input.value.length === 5) {
       const gameGuessData: GameGuessDto = {
         word: input.value,
@@ -90,6 +94,7 @@ addEventListener('keydown', async (event) => {
       }
       await guessWord(gameGuessData)
       const data = await getGameData(gameStore.gameData?.gameId || 0)
+      console.log('Data after guess:', data)
       input.value = ''
       gameStore.setGameData(data)
       attempt.value = gameStore.gameData?.attempts || 0
@@ -116,7 +121,7 @@ addEventListener('keydown', async (event) => {
     input.value = ''
   }
   console.log('input:', input.value)
-})
+}
 
 watch(input, (newValue) => {
   if (attempt.value < grid.value.length) {
@@ -125,6 +130,11 @@ watch(input, (newValue) => {
       grid.value[attempt.value][index] = letter
     })
   }
+})
+
+addEventListener('keydown', handleKeydown)
+onBeforeUnmount(() => {
+  removeEventListener('keydown', handleKeydown)
 })
 </script>
 
@@ -166,6 +176,7 @@ watch(input, (newValue) => {
   <transition name="popup">
     <div v-if="showPopup" class="popup">
       <h1 class="text-primary text-2xl">{{gameStore.gameData?.status ? "Congratulations! You won the game!" : "You lose, try again."}}</h1>
+      <Button><a href="/main">Return </a></Button>
     </div>
   </transition>
 </template>
