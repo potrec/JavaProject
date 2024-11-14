@@ -58,7 +58,18 @@ To run the Wordle Guessing Game locally, follow these steps:
 
 4. **Access the Application:**
    Open your browser and visit [http://localhost:5173](http://localhost:5000) to start playing the Wordle Guessing Game!
-
+5. **Login and register page**
+![](./screenshots/img.png)
+![](./screenshots/img_1.png)
+6. **Main page**
+![](./screenshots/img_3.png)
+7. **Game page**
+![](./screenshots/img_4.png)
+![](./screenshots/img_5.png)
+8. **View games**
+![](./screenshots/img_6.png)
+9. **Profile**
+![](./screenshots/img_7.png)
 ## Contributing
 
 If you'd like to contribute to the project, feel free to submit pull requests or open issues. Your contributions are highly appreciated!

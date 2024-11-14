@@ -58,7 +58,7 @@ watch(() => gameStore.gameData, (newGameData) => {
       <div
         v-for="(letter, index) in row"
         :key="index"
-        :class="`w-8 h-16 flex items-center justify-center text-primary-foreground ${getColorClass(letter)}`"
+        :class="`w-8 h-16 flex items-center justify-center text-primary text-2xl font-bold ${getColorClass(letter)}`"
         class="rounded m-1"
       >
         {{ letter.toUpperCase() }}
